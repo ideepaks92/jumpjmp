@@ -48,12 +48,20 @@ export default function LandingPage() {
           </div>
           <span className="font-semibold text-lg tracking-tight">JumpJMP</span>
         </div>
-        <button
-          onClick={handleGoogleSignIn}
-          className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-        >
-          Sign in
-        </button>
+        <div className="flex items-center gap-3">
+          <a
+            href="/demo"
+            className="px-3 py-1.5 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
+          >
+            Try Demo
+          </a>
+          <button
+            onClick={handleGoogleSignIn}
+            className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Sign in
+          </button>
+        </div>
       </nav>
 
       {/* Hero */}
@@ -69,6 +77,13 @@ export default function LandingPage() {
             analysis — then share a link with your team. No install, no license
             keys.
           </p>
+
+          <a
+            href="/demo"
+            className="inline-block px-6 py-3 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
+          >
+            Try it now — no sign-up needed
+          </a>
 
           {/* Auth form */}
           {sent ? (
