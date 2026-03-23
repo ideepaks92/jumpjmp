@@ -1,26 +1,57 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fafafa;
+  --foreground: #0a0a0a;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --border: #e4e4e7;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --accent: #f0f9ff;
+  --accent-foreground: #0c4a6e;
+  --destructive: #ef4444;
+  --ring: #2563eb;
+  --sidebar-bg: #ffffff;
+  --sidebar-border: #e4e4e7;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-ring: var(--ring);
+  --color-sidebar-bg: var(--sidebar-bg);
+  --color-sidebar-border: var(--sidebar-border);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Plotly.js overrides for consistent theming */
+.js-plotly-plot .plotly .modebar {
+  right: 8px !important;
+  top: 4px !important;
+}
+
+/* Drag and drop zones */
+.drop-zone-active {
+  border-color: var(--primary) !important;
+  background-color: color-mix(in srgb, var(--primary) 8%, transparent) !important;
+}
+
+/* Virtual scroll container */
+.virtual-table-container {
+  contain: strict;
 }

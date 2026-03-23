@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# JumpJMP
+
+Web-native, collaborative statistical analysis platform for engineers. Upload CSV/XLSX/Numbers files, build interactive charts, run SPC and process capability analysis, then share a link with your team.
+
+## Features
+
+- **Data Table** — Virtual-scrolled spreadsheet with auto-detected column types, sorting, and filtering
+- **Graph Builder** — Drag-and-drop scatter, line, bar, histogram, box, heatmap, and contour charts (Plotly.js)
+- **Descriptive Statistics** — Mean, std, median, quartiles, skewness, kurtosis
+- **Control Charts** — Individuals/MR and X-bar/R with UCL/LCL and out-of-control detection
+- **Process Capability** — Cp, Cpk, Pp, Ppk with spec-limit histogram overlay
+- **Distribution Fitting** — Normal, Weibull, Lognormal, Exponential (via Pyodide/scipy in-browser)
+- **Linear Regression** — Slope, intercept, R², residual plots, p-value
+- **Hypothesis Testing** — Welch's t-test, one-way ANOVA with group statistics
+- **Dashboard** — Drag-and-resize grid layout for arranging multiple charts
+- **Collaboration** — Shareable links (view/edit/fork), comments on charts
+- **Auth** — Magic link + Google OAuth via Supabase
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router, Turbopack)
+- **Language**: TypeScript 5, React 19
+- **Styling**: Tailwind CSS v4
+- **Charting**: Plotly.js via react-plotly.js
+- **Data Table**: TanStack Table + TanStack Virtual
+- **State**: Zustand + Immer
+- **Compute**: Pyodide (WASM) in Web Worker + native JS fast path
+- **File Parsing**: Papa Parse (CSV), SheetJS (XLSX/Numbers)
+- **Backend**: Supabase (Postgres + Auth + Realtime + Storage)
+- **Validation**: Zod
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone and install
+
+```bash
+git clone https://github.com/YOUR_USERNAME/jumpjmp.git
+cd jumpjmp
+npm install
+```
+
+### 2. Set up Supabase
+
+1. Create a new project at [supabase.com](https://supabase.com)
+2. Run the migration in `supabase/migrations/001_initial_schema.sql` in the Supabase SQL editor
+3. Create a storage bucket called `datasets`
+4. Enable Google OAuth in Authentication > Providers (optional)
+
+### 3. Configure environment
+
+```bash
+cp .env.example .env.local
+# Edit .env.local with your Supabase project URL and anon key
+```
+
+### 4. Run
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+app/                    Next.js App Router pages and API routes
+├── (app)/              Authenticated app shell
+│   ├── dashboard/      Workspace list
+│   ├── w/[id]/         Workspace editor (data, graph, analysis, dashboard tabs)
+│   └── s/[id]/         Shared workspace viewer
+├── api/                REST endpoints (workspace, dataset, analysis, share)
+└── page.tsx            Landing page with auth
 
-## Learn More
+components/             React components
+├── analysis/           Statistical analysis panels (6 tools)
+├── collaboration/      Share dialog, comment threads
+├── dashboard/          Grid layout, toolbar
+├── data-table/         Virtual-scrolled data table
+├── graph-builder/      Drag-and-drop chart builder
+├── shell/              Sidebar, topbar
+└── upload/             File drop zone, parser
 
-To learn more about Next.js, take a look at the following resources:
+lib/                    Business logic
+├── compute/            Stats engine (native JS + Pyodide worker)
+├── parsers/            CSV, XLSX, column inference
+├── schemas/            Zod validation schemas
+├── store/              Zustand workspace store
+└── supabase/           Client, server, middleware
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
