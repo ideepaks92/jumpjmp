@@ -1,19 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fafafa;
-  --foreground: #0a0a0a;
-  --muted: #f4f4f5;
-  --muted-foreground: #71717a;
-  --border: #e4e4e7;
-  --primary: #2563eb;
-  --primary-foreground: #ffffff;
-  --accent: #f0f9ff;
-  --accent-foreground: #0c4a6e;
-  --destructive: #ef4444;
-  --ring: #2563eb;
-  --sidebar-bg: #ffffff;
-  --sidebar-border: #e4e4e7;
+  --background: oklch(98.5% 0.005 250);
+  --foreground: oklch(15% 0.01 250);
+  --muted: oklch(95% 0.008 250);
+  --muted-foreground: oklch(45% 0.01 250);
+  --border: oklch(90% 0.01 250);
+  --primary: oklch(48% 0.18 260);
+  --primary-foreground: oklch(98% 0.005 260);
+  --accent: oklch(95% 0.025 260);
+  --accent-foreground: oklch(30% 0.08 260);
+  --destructive: oklch(55% 0.2 25);
+  --ring: oklch(48% 0.18 260);
+  --sidebar-bg: oklch(99% 0.003 250);
+  --sidebar-border: oklch(91% 0.008 250);
+  --success: oklch(55% 0.16 155);
+  --warning: oklch(65% 0.18 70);
 }
 
 @theme inline {
@@ -30,6 +32,8 @@
   --color-ring: var(--ring);
   --color-sidebar-bg: var(--sidebar-bg);
   --color-sidebar-border: var(--sidebar-border);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -37,21 +41,57 @@
 body {
   background: var(--background);
   color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Plotly.js overrides for consistent theming */
+/* Smooth transitions for all interactive elements */
+button, a, input, select, [role="button"] {
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Focus ring system */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Selection color */
+::selection {
+  background: oklch(48% 0.18 260 / 0.2);
+}
+
+/* Plotly overrides */
 .js-plotly-plot .plotly .modebar {
   right: 8px !important;
   top: 4px !important;
 }
 
-/* Drag and drop zones */
+.js-plotly-plot .plotly .modebar-btn {
+  opacity: 0.5;
+}
+
+.js-plotly-plot .plotly .modebar-btn:hover {
+  opacity: 1;
+}
+
+/* Drop zone active state */
 .drop-zone-active {
   border-color: var(--primary) !important;
-  background-color: color-mix(in srgb, var(--primary) 8%, transparent) !important;
+  background-color: oklch(48% 0.18 260 / 0.06) !important;
 }
 
 /* Virtual scroll container */
 .virtual-table-container {
   contain: strict;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

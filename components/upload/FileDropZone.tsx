@@ -96,8 +96,8 @@ export function FileDropZone({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         className={`
-          border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all
-          ${isDragging ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"}
+          border-2 border-dashed rounded-xl p-10 text-center cursor-pointer
+          ${isDragging ? "border-primary bg-accent" : "border-border hover:border-primary/40 hover:bg-muted/50"}
           ${disabled ? "opacity-50 cursor-not-allowed" : ""}
         `}
       >

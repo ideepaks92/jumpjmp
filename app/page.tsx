@@ -41,23 +41,23 @@ export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Nav */}
-      <nav className="flex items-center justify-between px-8 py-4 border-b border-border">
-        <div className="flex items-center gap-2">
+      <nav className="flex items-center justify-between px-6 lg:px-10 py-4">
+        <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
             <span className="text-primary-foreground font-bold text-sm">J</span>
           </div>
-          <span className="font-semibold text-lg tracking-tight">JumpJMP</span>
+          <span className="font-semibold text-base tracking-tight">JumpJMP</span>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <a
             href="/demo"
-            className="px-3 py-1.5 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
+            className="px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90"
           >
             Try Demo
           </a>
           <button
             onClick={handleGoogleSignIn}
-            className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            className="text-sm font-medium text-muted-foreground hover:text-foreground"
           >
             Sign in
           </button>
@@ -65,38 +65,55 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-24">
-        <div className="max-w-2xl mx-auto text-center space-y-6">
-          <h1 className="text-5xl font-bold tracking-tight leading-tight">
-            Statistical analysis
+      <main className="flex-1 flex flex-col items-center px-6 pt-20 pb-32 lg:pt-32 lg:pb-40">
+        <div className="max-w-xl text-center space-y-5">
+          <p className="text-sm font-medium tracking-wide uppercase text-primary">
+            Statistical Analysis for Engineers
+          </p>
+          <h1 className="text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1]">
+            Data in. Decisions out.
             <br />
-            <span className="text-primary">built for engineers</span>
+            <span className="text-muted-foreground">No installs, no license keys.</span>
           </h1>
-          <p className="text-lg text-muted-foreground max-w-lg mx-auto">
-            Upload CSV or Excel files, build interactive charts, run SPC and DOE
-            analysis — then share a link with your team. No install, no license
-            keys.
+          <p className="text-base text-muted-foreground max-w-md mx-auto leading-relaxed">
+            Upload CSV or Excel, build charts, run SPC and Cpk analysis — then
+            share a live link with your team.
           </p>
 
-          <a
-            href="/demo"
-            className="inline-block px-6 py-3 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
-          >
-            Try it now — no sign-up needed
-          </a>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+            <a
+              href="/demo"
+              className="px-6 py-3 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 w-full sm:w-auto text-center"
+            >
+              Try it now — no sign-up
+            </a>
+            <button
+              onClick={handleGoogleSignIn}
+              className="px-6 py-3 border border-border text-sm font-medium rounded-lg hover:bg-muted w-full sm:w-auto"
+            >
+              Sign in with Google
+            </button>
+          </div>
+        </div>
 
-          {/* Auth form */}
+        {/* Auth form (secondary) */}
+        <div className="mt-16 max-w-sm w-full">
           {sent ? (
-            <div className="bg-accent border border-primary/20 rounded-xl p-6 max-w-md mx-auto">
-              <p className="text-accent-foreground font-medium">
-                Check your email for a sign-in link.
+            <div className="bg-accent rounded-xl p-5 text-center">
+              <p className="text-sm font-medium text-accent-foreground">
+                Check your email for a sign-in link
               </p>
-              <p className="text-sm text-muted-foreground mt-1">
-                We sent a magic link to <strong>{email}</strong>
+              <p className="text-xs text-muted-foreground mt-1">
+                Sent to <strong>{email}</strong>
               </p>
             </div>
           ) : (
-            <div className="max-w-md mx-auto space-y-3">
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-px bg-border" />
+                <span className="text-xs text-muted-foreground">or sign in with email</span>
+                <div className="flex-1 h-px bg-border" />
+              </div>
               <form onSubmit={handleMagicLink} className="flex gap-2">
                 <input
                   type="email"
@@ -104,91 +121,70 @@ export default function LandingPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="flex-1 px-4 py-2.5 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="flex-1 px-3.5 py-2.5 rounded-lg border border-border bg-background text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                 />
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-5 py-2.5 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
+                  className="px-4 py-2.5 bg-foreground text-background text-sm font-medium rounded-lg hover:opacity-90 disabled:opacity-50 shrink-0"
                 >
-                  {loading ? "Sending..." : "Get started"}
+                  {loading ? "..." : "Send link"}
                 </button>
               </form>
-              <div className="flex items-center gap-3">
-                <div className="flex-1 h-px bg-border" />
-                <span className="text-xs text-muted-foreground">or</span>
-                <div className="flex-1 h-px bg-border" />
-              </div>
-              <button
-                onClick={handleGoogleSignIn}
-                className="w-full px-4 py-2.5 border border-border rounded-lg text-sm font-medium hover:bg-muted transition-colors flex items-center justify-center gap-2"
-              >
-                <svg className="w-4 h-4" viewBox="0 0 24 24">
-                  <path
-                    fill="currentColor"
-                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
-                  />
-                  <path
-                    fill="currentColor"
-                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                  />
-                  <path
-                    fill="currentColor"
-                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                  />
-                  <path
-                    fill="currentColor"
-                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                  />
-                </svg>
-                Continue with Google
-              </button>
               {error && (
-                <p className="text-sm text-destructive text-center">{error}</p>
+                <p className="text-xs text-destructive text-center">{error}</p>
               )}
             </div>
           )}
         </div>
 
-        {/* Feature cards */}
-        <div className="mt-24 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
-          <div className="border border-border rounded-xl p-6 space-y-2">
-            <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center text-primary font-bold">
-              Cp
+        {/* Capabilities */}
+        <div className="mt-28 max-w-3xl w-full">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="space-y-2">
+              <p className="text-xs font-semibold tracking-wider uppercase text-primary">
+                SPC
+              </p>
+              <h3 className="text-base font-semibold leading-snug">
+                Control Charts & Process Capability
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                X-bar/R, Individuals/MR, Cp/Cpk/Pp/Ppk with spec limits.
+                Detect process shifts as they happen.
+              </p>
             </div>
-            <h3 className="font-semibold">SPC & Process Capability</h3>
-            <p className="text-sm text-muted-foreground">
-              Control charts, Cpk/Ppk, Western Electric rules. Everything you
-              need for quality monitoring.
-            </p>
-          </div>
-          <div className="border border-border rounded-xl p-6 space-y-2">
-            <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center text-primary font-bold">
-              fx
+            <div className="space-y-2">
+              <p className="text-xs font-semibold tracking-wider uppercase text-primary">
+                Visualization
+              </p>
+              <h3 className="text-base font-semibold leading-snug">
+                Drag-and-Drop Graph Builder
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Scatter, histogram, box, heatmap — drag columns to axes.
+                Interactive zoom, pan, and brush selection.
+              </p>
             </div>
-            <h3 className="font-semibold">Graph Builder</h3>
-            <p className="text-sm text-muted-foreground">
-              Drag columns to build scatter plots, histograms, box plots, and
-              more. Interactive zoom, pan, and brush.
-            </p>
-          </div>
-          <div className="border border-border rounded-xl p-6 space-y-2">
-            <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center text-primary font-bold">
-              &lt;/&gt;
+            <div className="space-y-2">
+              <p className="text-xs font-semibold tracking-wider uppercase text-primary">
+                Collaboration
+              </p>
+              <h3 className="text-base font-semibold leading-snug">
+                Share a Link, Not a File
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                View, edit, or fork any workspace. No installs for
+                recipients. Comments anchored to charts.
+              </p>
             </div>
-            <h3 className="font-semibold">Share & Collaborate</h3>
-            <p className="text-sm text-muted-foreground">
-              One-click shareable links. View, edit, or fork any workspace.
-              Comments anchored to charts.
-            </p>
           </div>
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border px-8 py-4">
+      <footer className="border-t border-border px-6 py-5">
         <p className="text-xs text-muted-foreground text-center">
-          JumpJMP — Statistical analysis for engineers who ship.
+          JumpJMP — statistical analysis for engineers who ship
         </p>
       </footer>
     </div>
