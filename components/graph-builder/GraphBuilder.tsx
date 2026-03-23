@@ -19,20 +19,50 @@ export function GraphBuilder({
   onSaveAnalysis,
 }: GraphBuilderProps) {
   const [chartType, setChartType] = useState<AnalysisType>("scatter");
-  const [xColumn, setXColumn] = useState<string | null>(null);
-  const [yColumn, setYColumn] = useState<string | null>(null);
-  const [groupColumn, setGroupColumn] = useState<string | null>(null);
-  const [colorColumn, setColorColumn] = useState<string | null>(null);
+  const [xColumns, setXColumns] = useState<string[]>([]);
+  const [yColumns, setYColumns] = useState<string[]>([]);
+  const [groupColumns, setGroupColumns] = useState<string[]>([]);
+  const [colorColumns, setColorColumns] = useState<string[]>([]);
+
+  const addToAxis = useCallback(
+    (axis: "x" | "y" | "group" | "color", col: string) => {
+      const setter =
+        axis === "x"
+          ? setXColumns
+          : axis === "y"
+            ? setYColumns
+            : axis === "group"
+              ? setGroupColumns
+              : setColorColumns;
+      setter((prev) => (prev.includes(col) ? prev : [...prev, col]));
+    },
+    []
+  );
+
+  const removeFromAxis = useCallback(
+    (axis: "x" | "y" | "group" | "color", col: string) => {
+      const setter =
+        axis === "x"
+          ? setXColumns
+          : axis === "y"
+            ? setYColumns
+            : axis === "group"
+              ? setGroupColumns
+              : setColorColumns;
+      setter((prev) => prev.filter((c) => c !== col));
+    },
+    []
+  );
 
   const config: AnalysisConfig = {
     type: chartType,
-    x_column: xColumn ?? undefined,
-    y_column: yColumn ?? undefined,
-    group_column: groupColumn ?? undefined,
-    color_column: colorColumn ?? undefined,
+    x_column: xColumns[0],
+    y_column: yColumns[0],
+    group_column: groupColumns[0],
+    color_column: colorColumns[0],
   };
 
-  const hasData = xColumn || yColumn;
+  const hasData = xColumns.length > 0 || yColumns.length > 0;
 
   const handleSave = useCallback(() => {
     if (onSaveAnalysis) onSaveAnalysis(config);
@@ -41,7 +71,7 @@ export function GraphBuilder({
   return (
     <div className="flex flex-col lg:flex-row gap-4">
       {/* Config panel */}
-      <div className="w-full lg:w-56 space-y-3 shrink-0">
+      <div className="w-full lg:w-60 space-y-3 shrink-0">
         <div>
           <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
             Chart Type
@@ -55,27 +85,33 @@ export function GraphBuilder({
           </h3>
           <AxisDropZone
             label="X Axis"
-            value={xColumn}
-            onDrop={setXColumn}
-            onClear={() => setXColumn(null)}
+            values={xColumns}
+            onDrop={(col) => addToAxis("x", col)}
+            onRemove={(col) => removeFromAxis("x", col)}
+            onClear={() => setXColumns([])}
+            multi
           />
           <AxisDropZone
             label="Y Axis"
-            value={yColumn}
-            onDrop={setYColumn}
-            onClear={() => setYColumn(null)}
+            values={yColumns}
+            onDrop={(col) => addToAxis("y", col)}
+            onRemove={(col) => removeFromAxis("y", col)}
+            onClear={() => setYColumns([])}
+            multi
           />
           <AxisDropZone
             label="Group By"
-            value={groupColumn}
-            onDrop={setGroupColumn}
-            onClear={() => setGroupColumn(null)}
+            values={groupColumns}
+            onDrop={(col) => addToAxis("group", col)}
+            onRemove={(col) => removeFromAxis("group", col)}
+            onClear={() => setGroupColumns([])}
           />
           <AxisDropZone
             label="Color"
-            value={colorColumn}
-            onDrop={setColorColumn}
-            onClear={() => setColorColumn(null)}
+            values={colorColumns}
+            onDrop={(col) => addToAxis("color", col)}
+            onRemove={(col) => removeFromAxis("color", col)}
+            onClear={() => setColorColumns([])}
           />
         </div>
 
@@ -91,8 +127,9 @@ export function GraphBuilder({
                 draggable
                 onDragStart={(e) => {
                   e.dataTransfer.setData("text/plain", col.name);
+                  e.dataTransfer.effectAllowed = "move";
                 }}
-                className="px-2 py-1 text-xs bg-muted rounded cursor-grab hover:bg-border transition-colors flex items-center gap-1.5"
+                className="px-2 py-1 text-xs bg-muted rounded cursor-grab hover:bg-border flex items-center gap-1.5"
               >
                 <span
                   className={`text-[10px] font-bold ${
@@ -122,7 +159,7 @@ export function GraphBuilder({
         {hasData && onSaveAnalysis && (
           <button
             onClick={handleSave}
-            className="w-full px-3 py-1.5 bg-primary text-primary-foreground text-xs font-medium rounded-md hover:opacity-90 transition-opacity"
+            className="w-full px-3 py-1.5 bg-primary text-primary-foreground text-xs font-medium rounded-md hover:opacity-90"
           >
             Add to Dashboard
           </button>
@@ -130,15 +167,19 @@ export function GraphBuilder({
       </div>
 
       {/* Chart area */}
-      <div className="flex-1 border border-border rounded-lg bg-background min-h-[400px] flex items-center justify-center">
+      <div className="flex-1 border border-border rounded-lg bg-background min-h-[400px] flex items-center justify-center overflow-hidden">
         {hasData ? (
-          <ChartRenderer config={config} data={data} />
+          <ChartRenderer
+            config={config}
+            data={data}
+            xColumns={xColumns}
+            yColumns={yColumns}
+          />
         ) : (
           <div className="text-center text-muted-foreground text-sm p-8">
             <p className="font-medium">Drag columns to the axes</p>
             <p className="text-xs mt-1">
-              Drag a column from the list or the data table header to an axis
-              drop zone
+              Drop multiple columns on X or Y to overlay them as separate traces
             </p>
           </div>
         )}

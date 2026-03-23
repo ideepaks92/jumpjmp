@@ -82,9 +82,9 @@ button, a, input, select, [role="button"] {
   background-color: oklch(48% 0.18 260 / 0.06) !important;
 }
 
-/* Virtual scroll container */
+/* Virtual scroll container — no `contain: strict` as it collapses height without explicit dimensions */
 .virtual-table-container {
-  contain: strict;
+  contain: content;
 }
 
 /* Reduced motion */
